@@ -1,0 +1,22 @@
+========================================
+  PORTAL HISTÓRIA DA PMESP — ACESSO
+========================================
+
+Olá! Para entrar no portal do curso, use:
+
+  Endereço: (cole aqui o link onde o portal está hospedado)
+  Usuário: aluno
+  Senha: pmsp1931
+
+----------------------------------------
+PROFESSOR — COMO TROCAR A SENHA
+----------------------------------------
+1. Abra o arquivo portal-historia-pm.html num editor de texto
+   (Bloco de Notas serve).
+2. Procure por:  USUARIOS = { "aluno": "pmsp1931" }
+3. Troque a senha entre as aspas. Exemplo:
+     USUARIOS = { "aluno": "novaSenha123" }
+4. Salve o arquivo e avise a turma da nova senha.
+5. Atualize este .txt com a senha nova antes de repassar.
+
+Dica: troque a senha por turma/mês para controlar o acesso.

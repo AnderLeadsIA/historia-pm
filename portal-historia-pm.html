@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentinelas da História | Portal História da PMESP</title>
+<script src="apostila-busca.js" defer></script>
+<style>
+:root{color-scheme:light;--azul:#0b2a4a;--azul2:#14467c;--dourado:#c9a227;--cinza:#f3f4f6;--verde:#157347;--vermelho:#b42318}
+*{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:#eef1f5;color:#1c1c1c}
+.hidden{display:none!important}
+#loginWrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0b2a4a,#14467c);padding:20px}
+.loginBox{background:#fff;border-radius:14px;max-width:420px;width:100%;padding:32px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.loginBox h1{margin:0;color:var(--azul);font-size:22px}.loginBox p{color:#555;font-size:14px}
+.loginBox input{width:100%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:8px;font-size:15px}
+.loginBox button{width:100%;padding:13px;background:var(--azul);color:#fff;border:0;border-radius:8px;font-size:16px;cursor:pointer;margin-top:8px}
+.loginBox button:hover{background:var(--azul2)}.erro{background:#fde8e8;color:var(--vermelho);padding:10px;border-radius:8px;font-size:13px;margin-top:8px}
+.dica{background:#fff8e1;padding:10px;border-radius:8px;font-size:13px;margin-top:10px;color:#664d03}
+header{background:var(--azul);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;flex-wrap:wrap;gap:8px}
+header .t{font-weight:700;font-size:17px}header .t span{color:var(--dourado)}
+nav{display:flex;gap:8px;flex-wrap:wrap}nav button{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:8px 14px;border-radius:20px;cursor:pointer;font-size:14px}
+nav button.ativo,nav button:hover{background:var(--dourado);color:#111;border-color:var(--dourado)}
+main{max-width:1050px;margin:0 auto;padding:20px}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h2{margin-top:0;color:var(--azul)}.card h3{color:var(--azul2)}
+.btn{display:inline-block;padding:11px 18px;border-radius:8px;border:0;cursor:pointer;font-size:14px;margin:4px 6px 4px 0;text-decoration:none}
+.btn-azul{background:var(--azul);color:#fff}.btn-ouro{background:var(--dourado);color:#111;font-weight:700}.btn-verde{background:var(--verde);color:#fff}.btn-cinza{background:#e5e7eb;color:#111}.btn:hover{opacity:.9}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.aulaCard{background:#fff;border-radius:12px;padding:16px;border-left:6px solid var(--azul);box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.aulaCard h3{margin:0 0 6px;color:var(--azul);font-size:16px}.aulaCard p{font-size:13px;color:#555;margin:0 0 10px}
+.topico{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:14px;line-height:1.55}
+.topico b{color:var(--azul)}.marco{background:#fffbeb;border-left:4px solid var(--dourado);padding:10px 14px;border-radius:0 8px 8px 0;margin:8px 0;font-size:14px}
+.q{border:1px solid #ddd;border-radius:10px;padding:14px;margin:10px 0;background:#fff}
+.q p{font-weight:600;margin:0 0 10px}.q label{display:block;padding:8px;border-radius:6px;cursor:pointer;font-size:14px;margin:3px 0;border:1px solid transparent}
+.q label:hover{background:#f1f5f9}.q label.certa{background:#d1e7dd;border-color:var(--verde)}.q label.errada{background:#f8d7da;border-color:var(--vermelho)}
+.resultado{padding:14px;border-radius:10px;font-size:15px;margin:12px 0}.ok{background:#d1e7dd}.fail{background:#f8d7da}
+.fonte{font-size:12px;color:#666;font-style:italic}
+.aviso{color:#b42318;font-weight:700;font-size:13px;line-height:1.5}
+footer{text-align:center;padding:20px;color:#777;font-size:12px}
+.badge{display:inline-block;background:var(--azul);color:#fff;font-size:11px;padding:3px 10px;border-radius:12px;margin-bottom:6px}
+.autor{font-size:12px;color:rgba(255,255,255,.85);margin-top:2px}
+.busca{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.busca input{flex:1;min-width:200px;padding:11px;border:1px solid #ccc;border-radius:8px;font-size:15px}
+.resBusca{border:1px solid #e2e8f0;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:14px;background:#f8fafc}
+.resBusca mark{background:#fde68a;padding:0 2px;border-radius:3px}
+.resBusca .pg{font-weight:700;color:var(--azul)}
+@media(max-width:600px){main{padding:12px}}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginWrap">
+  <div class="loginBox">
+    <h1>⭐ Sentinelas da História</h1>
+    <p>Portal de História da Polícia Militar do Estado de São Paulo<br>1º Ciclo de Ensino — acesso restrito aos alunos.<br><b>Elaborado por Subten PM Anderson — 2º BPRv</b></p>
+    <input id="user" placeholder="Usuário" autocomplete="username">
+    <input id="pass" type="password" placeholder="Senha" autocomplete="current-password">
+    <button onclick="fazerLogin()">Entrar no Portal</button>
+    <div id="loginErro" class="erro hidden">Usuário ou senha incorretos.</div>
+  </div>
+</div>
+
+<!-- ============ PORTAL ============ -->
+<div id="portal" class="hidden">
+<header>
+  <div><div class="t">⭐ Sentinelas da <span>História</span> — PMESP · Soldado 2ª Classe</div><div class="autor">Elaborado por Subten PM Anderson — 2º BPRv</div></div>
+  <nav>
+    <button class="ativo" onclick="aba('inicio',this)">Início</button>
+    <button onclick="aba('aulas',this)">Aulas</button>
+    <button onclick="aba('simulados',this)">Simulados</button>
+    <button onclick="aba('pesquisar',this)">Pesquisar</button>
+    <button onclick="aba('materiais',this)">Materiais</button>
+    <button onclick="sair()">Sair</button>
+  </nav>
+</header>
+<main>
+
+<!-- INICIO -->
+<section id="s-inicio">
+  <div class="card">
+    <h2>Bem-vindo(a) ao curso! 🎖️</h2>
+    <p>Todo o conteúdo deste portal foi montado <b>com base fiel na apostila “História da PM – Julho/2024” (73 páginas, 1º Ciclo)</b> do Prof. José Roberto dos Santos. As provas cobram perguntas <b>diretas e literais</b> da apostila — por isso cada aula traz os tópicos com datas, nomes e números exatos, e cada simulado mostra a fonte na apostila.</p>
+    <p><span class="badge">COMO ESTUDAR</span><br>1️⃣ Leia uma aula por vez → 2️⃣ Faça o simulado da aula → 3️⃣ Faça o simuladão geral de 20 questões (modelo da prova real).</p>
+    <button class="btn btn-ouro" onclick="aba('aulas',document.querySelectorAll('nav button')[1])">Começar pela Aula 1 e 2 →</button>
+    <button class="btn btn-azul" onclick="aba('simulados',document.querySelectorAll('nav button')[2])">Ir aos Simulados</button>
+  </div>
+  <div class="card">
+    <h3>📊 Seu progresso (salvo neste navegador)</h3>
+    <div id="progresso">Nenhum simulado feito ainda.</div>
+    <button class="btn btn-cinza" onclick="limparProg()">Limpar progresso</button>
+  </div>
+</section>
+
+<!-- AULAS -->
+<section id="s-aulas" class="hidden">
+  <div class="card"><h2>📚 Apostila em tópicos — 8 Aulas</h2><p>Clique em <b>Abrir aula</b> para ler. Grifos em <b>negrito</b> = o que mais cai na prova.</p></div>
+  <div class="grid" id="gradeAulas"></div>
+  <div id="conteudoAula"></div>
+</section>
+
+<!-- SIMULADOS -->
+<section id="s-simulados" class="hidden">
+  <div class="card"><h2>📝 Simulados on-line</h2>
+  <p>Perguntas <b>diretas, idênticas ao estilo da prova</b> (5 alternativas, 1 correta). Ao corrigir, cada questão mostra o <b>gabarito + fonte na apostila</b>.</p></div>
+  <div class="grid" id="gradeSim"></div>
+  <div id="areaQuiz"></div>
+</section>
+
+<!-- PESQUISAR -->
+<section id="s-pesquisar" class="hidden">
+  <div class="card"><h2>🔎 Pesquisar na apostila íntegra</h2>
+    <p>Digite um assunto e veja os trechos <b>literais da apostila completa (73 páginas)</b>, com a página de cada um. Ideal para conferir o contexto exato antes da prova.</p>
+    <div class="busca">
+      <input id="campoBusca" placeholder="Ex: Tobias de Aguiar, 15 de dezembro, Canudos, MMDC..." onkeydown="if(event.key==='Enter')pesquisar()">
+      <button class="btn btn-azul" onclick="pesquisar()">Pesquisar</button>
+      <button class="btn btn-cinza" onclick="document.getElementById('campoBusca').value='';document.getElementById('resBusca').innerHTML=''">Limpar</button>
+    </div>
+    <div id="resBusca"></div>
+    <p class="fonte">Busca feita no texto integral da apostila “História da PM – Jul/2024”. Acentuação é ignorada.</p>
+  </div>
+</section>
+
+<!-- MATERIAIS -->
+<section id="s-materiais" class="hidden">
+  <div class="card"><h2>📁 Links do Google Drive</h2>
+    <a class="btn btn-azul" id="drive1" href="https://drive.google.com/" target="_blank">📂 Pasta — Apostila e slides</a>
+    <a class="btn btn-azul" id="drive2" href="https://drive.google.com/" target="_blank">📂 Pasta — Provas e gabaritos</a>
+    <a class="btn btn-azul" id="drive3" href="https://drive.google.com/" target="_blank">📂 Pasta — Áudios / extras</a>
+  </div>
+  <div class="card"><h2>⬇️ Baixar materiais</h2>
+    <p>Arquivos que acompanham o portal (mesma pasta):</p>
+    <a class="btn btn-verde" href="Apostila-Historia da PM.pdf" download>⬇️ Apostila completa (PDF)</a>
+    <a class="btn btn-verde" href="Prova-Historia-PM.pdf" download>⬇️ Prova exemplo (PDF)</a>
+    <p class="fonte">Apostila e prova também disponíveis na pasta do Drive acima.</p>
+  </div>
+</section>
+
+</main>
+<footer>Sentinelas da História · Elaborado por Subten PM Anderson — 2º BPRv · conteúdo fiel à apostila Jul/2024 · “Nós, Policiais Militares, sob a proteção de Deus, estamos compromissados com a defesa da Vida, da Integridade Física e da Dignidade da Pessoa Humana.”<br><br><span class="aviso">⚠️ ATENÇÃO: para estudar de verdade, leia a apostila completa. Os resumos e simulados deste portal são somente material de apoio. A prova é feita com base na apostila, bem como todo recurso, caso precise, é feito com base na apostila.</span></footer>
+</div>
+
+<script>
+/* ================= CONFIG — PROFESSOR EDITE AQUI =================
+   1) LOGIN: troque usuario/senha abaixo.
+   2) DRIVE: troque os 3 links do Google Drive abaixo. */
+const USUARIOS = { "aluno": "pmsp1931" };  // ex: {"aluno01":"pmsp2024","aluno02":"pmsp2024"}
+const DRIVE_LINKS = {
+  drive1: "https://drive.google.com/",  // pasta apostila
+  drive2: "https://drive.google.com/",  // pasta provas
+  drive3: "https://drive.google.com/"   // pasta extras
+};
+/* ================================================================ */
+document.getElementById('drive1').href = DRIVE_LINKS.drive1;
+document.getElementById('drive2').href = DRIVE_LINKS.drive2;
+document.getElementById('drive3').href = DRIVE_LINKS.drive3;
+
+function fazerLogin(){
+  const u=document.getElementById('user').value.trim(), p=document.getElementById('pass').value;
+  if(USUARIOS[u] && USUARIOS[u]===p){
+    document.getElementById('loginWrap').classList.add('hidden');
+    document.getElementById('portal').classList.remove('hidden');
+    sessionStorage.setItem('pm_log','1'); mostrarProgresso();
+  } else document.getElementById('loginErro').classList.remove('hidden');
+}
+if(sessionStorage.getItem('pm_log')==='1'){document.getElementById('loginWrap').classList.add('hidden');document.getElementById('portal').classList.remove('hidden');}
+document.getElementById('pass')?.addEventListener('keydown',e=>{if(e.key==='Enter')fazerLogin();});
+function sair(){sessionStorage.removeItem('pm_log');location.reload();}
+function aba(id,btn){
+  ['inicio','aulas','simulados','pesquisar','materiais'].forEach(x=>document.getElementById('s-'+x).classList.add('hidden'));
+  document.getElementById('s-'+id).classList.remove('hidden');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('ativo')); if(btn)btn.classList.add('ativo');
+  window.scrollTo(0,0);
+}
+
+/* ================= AULAS (resumo fiel da apostila) ================= */
+const AULAS=[
+{t:"Aula 1 e 2 — Origens: do Ocidente ao 1º Império",d:"Polis, Roma, Hermandades, Peel, Família Real, Independência e PMs antes de 1831.",h:`
+<div class="topico"><b>Conceito de polícia:</b> vem de <b>“politéia” → “polis”</b> (cidade-Estado grega) = “encarregado de guardar a cidade”. <b>Platão</b>: eram os magistrados. <b>Aristóteles</b>: acrescenta o sentido de leis/regras da administração (próximo de Política). Atenas tinha ~<b>300 escravos</b> guardas urbanos.</div>
+<div class="topico"><b>Roma (Augusto, 27 a.C.–14 d.C.):</b> <b>coortes de vigilância</b> (segurança urbana das regiões do Império) + <b>Coortes Urbanas</b> + <b>Guarda Pretoriana</b>. Cargo de <b>Prefeito da cidade</b>; <b>vigiles</b> (patrulheiros) e <b>stationarii</b> (postos fixos).</div>
+<div class="topico"><b>Idade Média/Moderna:</b> ordem civil ao monarca, moral à Igreja; séc. XIV “polícia” = poder do Estado; depois = ciência de governar.</div>
+<div class="marco">⭐ <b>Modelo inspirador dos corpos modernos: as HERMADADES espanholas.</b> França: <b>Gendarmerie</b> (militarizada) e Polícia Urbana (séc. XVII). Inglaterra: <b>Polícia Metropolitana de Londres, outubro de 1829, por Sir Robert Peel</b>. Portugal: <b>Intendência Geral de Polícia da Corte e do Reino (1760)</b> → Guarda Real de Lisboa → <b>Intendência no Rio (1808)</b>, até 1831.</div>
+<div class="topico"><b>Família Real:</b> Bloqueio Continental (1807) → corte ao Rio em <b>1808</b> com ~<b>600 homens</b>. Decreto <b>13/05/1809</b>: Divisão Militar da <b>Guarda Real de Polícia da Corte</b> (cerne da PMERJ).</div>
+<div class="topico"><b>Independência:</b> 1815 Vice-Reino; 1820 Revolução Liberal Portuguesa (volta D. João VI); <b>7/09/1822</b> ruptura.</div>
+<div class="topico"><b>1º Império (7/09/1822–7/04/1831):</b> Constituição <b>25/03/1824</b> (Poder Moderador); Exército estruturado em 1824 (Dia do Exército <b>19 de abril</b>, Batalha dos Guararapes 1648); PM Bahia <b>17/02/1825</b>, Pernambuco <b>11/06/1825</b>; reforma Peel <b>1829</b>. Conflitos: Independência (1822-23), Bahia (1821-23), <b>Confederação do Equador (1824)</b>, Cisplatina (1825-28), <b>Revolta dos Mercenários (1828 — cai no 1º Reinado!)</b>. Abdicação <b>7/04/1831</b>.</div>
+<div class="marco">⭐ <b>PMs anteriores a 1831:</b> <b>Minas Gerais 1775 (mais antiga do país)</b> → RJ 1809 → Pará 1818 → Bahia e Pernambuco 1825 → <b>SP 1831</b>.</div>`},
+{t:"Aula 3 e 4 — Regência, Guarda Nacional e criação da PMESP",d:"Feijó, Guarda Nacional, 15/12/1831, brasão, 19 estrelas, Farrapos e Palmas.",h:`
+<div class="topico"><b>Período Regencial (1831–1840):</b> D. Pedro II com 5 anos → <b>Regência Trina Provisória</b>, depois <b>Permanente (17/07/1831)</b>. Regentes: <b>José da Costa Carvalho, João Bráulio Muniz e Francisco de Lima e Silva</b>. Ministro da Justiça: <b>Padre Diogo Antônio Feijó (posse 6/07/1831) — criador das instituições que originaram as PMs provinciais</b>.</div>
+<div class="marco">⭐ <b>Guarda Nacional — 18/08/1831.</b> Missão: <b>“defender a Constituição, a Liberdade, a Independência e a Integridade do Império”</b>. Molde francês; amadores (caçadores, fuzileiros, sertanejos, voluntários); oficiais eleitos; renda <b>200$000 (cidades) / 100$000 (campo)</b>; base municipal, politizada, elite local; mostra <b>desconfiança no Exército</b> (efetivo cai de 30.000 → 14.342 → 10.000; recrutamento vai para a GN).</div>
+<div class="topico"><b>Revoltas da Regência:</b> Cabanagem (Pará 1833-36), <b>Farroupilha (RS 1835-45)</b>, Sabinada (Bahia 1837-38), Balaiada (Maranhão 1838-41). <b>14 PMs nascem na Regência (1831-40)</b>: SP 1831, Alagoas 1832, Paraíba 1832, RN 1834, Sergipe/ES/SC/CE/PI/MT/MS 1835, MA 1836, AM 1837, Brigada Militar RS.</div>
+<div class="marco">⭐ <b>MARCO 1 — 15/12/1831: Guarda Municipal Permanente de SP.</b> Projeto Feijó (30/08) + Decreto <b>22/10/1831</b> (Corte, extensível às províncias) → <b>Brigadeiro Rafael Tobias de Aguiar</b> cria em SP: <b>130 homens = 100 infantes + 30 cavalarianos</b>. Comandantes: <b>Alferes José Gomes de Almeida</b> (a pé, do 6º BC, comissionado capitão) e <b>Cap. Pedro Alves de Siqueira</b> (a cavalo). Cidade SP ~30 mil hab.; província ~251 mil. Características: voluntários, subordinação ao presidente da província, <b>sempre de serviço paga pelo erário</b>, sem quartel (<b>Convento do Carmo</b>), falta de efetivo, indisciplina, até <b>2 tentativas de roubo ao Tesouro/Palácio</b>.</div>
+<div class="topico"><b>Brasão (1958, proposta Ten. Olavo Soares; Dec. 34.244/1958, alt. Dec. 66.876/2022):</b> <b>escudo português perfilado em ouro, bordadura vermelha com 19 estrelas de 5 pontas em prata (= 19 marcos históricos)</b>; listras da bandeira paulista; <b>leão rampante em ouro com gládio</b>; ramos de <b>carvalho e louro</b>; tenentes: <b>bandeirante + soldado de 1831</b>; listel azul <b>“LEALDADE E CONSTÂNCIA”</b>.</div>
+<div class="topico"><b>Denominações históricas:</b> Guarda Municipal Permanente → Corpo Policial Permanente → Corpo Policial Provisório → Brigada Policial → Força Militar de Polícia → Força Policial → <b>Força Pública</b> → Polícia Militar.</div>
+<div class="marco">⭐ <b>MARCO 2 — Guerra dos Farrapos (1835-45):</b> 19/09/1835 tomada de Porto Alegre; <b>54 guardas de SP</b> com o 6º Batalhão, como <b>artilheiros sob Alferes Manoel V. Guedes</b>; pacificação por Caxias em <b>1º/03/1845</b>. <b>MARCO 3 — Campo das Palmas</b> + início da instrução à tropa.</div>`},
+{t:"Aula 5 e 6 — PMESP no 2º Império",d:"Vocação legalista, Sorocabana 1842, Corpo Musical, Paraguai e Bombeiros.",h:`
+<div class="topico"><b>2º Reinado: 23/07/1840 (Golpe da Maioridade) – 15/11/1889.</b> Leis abolicionistas: <b>Ventre-Livre (1871), Sexagenários (1885), Abolição 13/05/1888</b>; imigração para o café. <b>Vocação legalista</b> da PMESP = sempre ao lado da lei/ordem.</div>
+<div class="marco">⭐ <b>MARCO 4 — Revolução Liberal Sorocabana (1842).</b> Dissolução da Assembleia → levantes de <b>Teófilo Otoni (MG)</b> e <b>Rafael Tobias de Aguiar + Feijó (SP)</b>. Concentração em <b>Sorocaba (17/05/1842)</b>; colunas: <b>Cap. Manoel Antônio Ferreira → Campinas (Venda Grande)</b> e <b>Major Galvão (Libertadora) → SP (Pirajuçara/Butantã)</b>. Derrotas: <b>Jaguaré 28/05 (Barão de Caxias)</b>; <b>Venda Grande 7/06 (Ten.-Cel. Amorim Bezerra derrota Boaventura do Amaral)</b> — <b>batismo de fogo da Cavalaria (Cap. Pedro Alves de Siqueira)</b>. Caxias entra em Sorocaba <b>20/06</b>, prende Feijó; vence em <b>Santa Luzia (MG)</b>. Tranquilidade comunicada em <b>9/09/1842</b>.</div>
+<div class="topico"><b>Corpo Musical — 7/04/1857 (Lei 24):</b> músicos desde 1843; <b>17 componentes + 1 sargento-mestre</b>; unidade mais antiga; <b>Major Joaquim Antão Fernandes</b> (Marcha Batida, Lei 5.700 Símbolos Nacionais); Ten. Barbosa de Brito (obras até na U.S. Navy/Marine Band); ~1,5 milhão de pessoas/ano; 11 bandas regimentais.</div>
+<div class="marco">⭐ <b>MARCO 5 — Guerra do Paraguai (dez/1864–mar/1870):</b> Paraguai (Solano López) x <b>Tríplice Aliança (Brasil, Argentina, Uruguai)</b>; estopim: invasão de MT + vapor <b>Marquês de Olinda</b>. SP parte em <b>10/04/1865 com 273 homens (com banda), Ten.-Cel. Gavião Peixoto</b>; <b>Retirada da Laguna (8/05–11/06/1867)</b> — fome, sede, cólera. Filha da guerra: <b>Companhia de Menores (1876-84)</b>, amparo a órfãos.</div>
+<div class="topico"><b>Corpo de Bombeiros:</b> incêndio da <b>biblioteca da Faculdade de Direito (1880)</b> → contratado <b>Ten. José Severino Dias</b>; <b>10/03/1880</b> Seção de Bombeiros anexa à Cia. de Urbanos (<b>Rua do Quartel, hoje 11 de Agosto</b>); avisos por <b>sinos de igreja</b>. Outra org. do período: <b>Guarda Cívica</b>.</div>`},
+{t:"Aula 7 e 8 — PMESP na 1ª República",d:"1891, quartel da Luz, Armada, Protocolos, Canudos, Vacina, Missão Francesa.",h:`
+<div class="topico"><b>Constituição de 1891</b> → <b>Lei 17 de 14/11/1891</b>: extingue o Corpo Policial Permanente, cria a <b>Força Policial: 3.940 homens (4 corpos + cavalaria + urbanos + bombeiros)</b>; 1892 viram <b>batalhões</b>; 1896: <b>Brigada Policial + Guarda Cívica da Capital + do Interior</b>. <b>1º quartel próprio (Luz, neoclássico)</b>, hospital; papel na transição ao governo civil.</div>
+<div class="marco">⭐ <b>MARCO 6 — Revolta da Armada + Federalista (1893-94):</b> Gumercindo Saraiva (RS) detido na <b>Lapa (PR)</b>; <b>Custódio de Mello</b> revolta-se; <b>Bernardino de Campos</b> convoca a Força Pública + <b>Batalhões Patrióticos (desde 15/03)</b>; Santos, Itararé, 2ª Brigada Gen. Ewerton. Comando em Santos 5–16/10.</div>
+<div class="topico"><b>MARCO 7 — Questão dos Protocolos:</b> cobrança de <b>verbas emprestadas ao governo na Federalista</b> envolvendo italianos.</div>
+<div class="marco">⭐ <b>MARCO 8 — Canudos (sertão da Bahia):</b> Unidade <b>“Tobias de Aguiar” escolta comboios</b> contra emboscadas do Conselheiro → escolhida para a <b>vanguarda do ataque</b>; eixo Salvador–Queimadas–Monte Santo (23/08)–Canudos; luta até <b>6/10</b>.</div>
+<div class="topico"><b>Revolta da Vacina (RJ, 5/11/1904, “quebra-lampiões”):</b> contra <b>vacina obrigatória da varíola (Lei 31/10/1904, Oswaldo Cruz)</b> + reformas urbanas; invasão de casas.</div>
+<div class="topico"><b>Sertão:</b> <b>Seção de Capturas — “Tenente Galinha” = Ten. João Antonio de Oliveira</b>. <b>Polícia Civil criada em 1841</b>. <b>Caixa Beneficente</b> (socorro a famílias).</div>
+<div class="marco">⭐ <b>1ª Missão Francesa (21/03/1906–1914, sai pela WWI):</b> instrução para <b>defesa territorial</b>; escolas de <b>soldados, cavalaria, alfabetização, sargentos, CIM e formação acadêmica</b>; <b>boxe savate, esgrima</b>; “Tragédia do Quartel da Luz”. Base do <b>Resgate e Rádio-patrulhamento Aéreo</b> futuros.</div>`},
+{t:"Aula 9 e 10 — Chibata a 1928",d:"Chibata, Aviação 1913, Greve 1917, 2ª Missão, 1924, Guarda Civil e Jahú.",h:`
+<div class="marco">⭐ <b>MARCO 9 — Revolta da Chibata (1910, marinheiro João Cândido):</b> motim naval contra <b>castigos físicos</b>; anistia e depois dispensa dos envolvidos; batalhão paulista cumpre missão e regressa.</div>
+<div class="topico"><b>Aviação:</b> 1912 cães + pombal; <b>Escola de Aviação criada por lei em 1913</b>; atua em 1924 e 1930; <b>extinta após 1930 (vai ao Exército)</b>; remanescente origina em <b>1984 o Rádio-patrulhamento Aéreo</b>.</div>
+<div class="topico"><b>MARCO 10 — Greve operária de 1917:</b> indenizações, salários, <b>crianças como adultos + trabalho de mulheres</b>. <b>WWI + Gripe Espanhola</b>.</div>
+<div class="topico"><b>2ª Missão Francesa (1919, Gen. Antoine):</b> curso de aperfeiçoamento de oficiais, <b>automobilismo, alfabetização, radiotelegrafia</b>; slogan <b>“Do valor dos quadros depende o valor da tropa”</b>. <b>Tenentismo</b> (contra oligarquia; 1922-27 → 1930).</div>
+<div class="marco">⭐ <b>MARCO 11 — 5/07/1922: 18 do Forte de Copacabana + Sedição de Mato Grosso.</b> <b>MARCO 12 — Revolução de 1924 (SP, Major Miguel Costa):</b> ~<b>1.330 homens</b>; ocupam 1º BI e outros; <b>3º, 4º, 5º BIs + Guardas Cívicas legalistas</b>; combates no centro; saída pela <b>Estação da Luz</b>; retorno legalista em <b>31/07/1924</b>. Consequência: <b>Coluna Miguel Costa–Prestes</b>.</div>
+<div class="topico"><b>Cruz Azul; Criação da Guarda Civil; MARCO 13 — Goiás/campanhas do Nordeste em 1926; Voo do Jahú; Regulamento Policial de 28.</b></div>`},
+{t:"Aula 11 e 12 — Era Vargas",d:"1930, 1932 (MMDC), 1934/37, extremismos e FEB.",h:`
+<div class="marco">⭐ <b>MARCO 14 — Revolução de 1930:</b> Oswaldo Aranha organiza em <b>Porto Alegre</b>; queda de <b>Washington Luís (24/10)</b>; Vargas assume; voto feminino em 1934. Heróis da Força: <b>Cel. Pedro Arbues (61 anos, voluntário)</b>, <b>Ten.-Cel. Edgard Armond</b>, Miguel Costa adere. Consequência federal: <b>controle bélico, Secretaria de Segurança, nome muda para FORÇA POLICIAL</b>; radiopatrulha (1935).</div>
+<div class="marco">⭐ <b>MARCO 15 — Revolução Constitucionalista (9/07/1932):</b> sigla <b>MMDC = Martins, Miragaia, Dráusio e Camargo (23/05; Alvarenga morre 81 dias depois)</b>; Dráusio tinha <b>14 anos</b>; IGHGS (2002) inclui mais nomes. Comando: <b>Marcondes Salgado, Moya, Fonseca</b>; logística total paulista; <b>Guarda Civil (3.141 + voluntários, Cap. Kauffman)</b>; Força ~8.200; últimos combates <b>Porto Esperança/Itapeva</b> → <b>Constituição de 1934</b>. Geração <b>Gen. Freitas Almeida</b>.</div>
+<div class="topico"><b>Constituições 1934 e 1937 (Estado Novo)</b>. <b>MARCO 16 — Extremismos: 1935 comunistas, 1938 integralistas</b> (debelados pela Força + Guarda Civil). <b>MARCO 17 — WWII:</b> <b>79 guardas civis na FEB/Itália</b> (7º BV, pelotão). <b>Três generais da Força Pública</b> (entre eles Miguel Costa e Marcondes Salgado).</div>`},
+{t:"Aula 13 e 14 — Democracia (1946-1964)",d:"1946/47, especializadas, rodoviária, feminina 1955 e hinos.",h:`
+<div class="topico"><b>Constituição de 1946</b> (pós–Estado Novo; medo de “exército estadual” pós-1932) e <b>Paulista de 1947</b>: volta o nome <b>FORÇA PÚBLICA</b>; Guarda Civil cresce.</div>
+<div class="topico"><b>Especializadas:</b> <b>Polícia Rodoviária (Cel. Pina de Figueiredo; ex-guardas do DER; Corpo de Polícia Rodoviária)</b>; <b>CPChq</b> (foragidos, zona rural); <b>Presídio Militar Romão Gomes (1949)</b>; <b>Canil (1950, cães da Argentina; precedente: belgas na Guarda Cívica em 1912)</b>; policiamento <b>ambiental/florestal</b>; “salto na Amazônia” (missão de saúde/disciplina no interior).</div>
+<div class="marco">⭐ <b>Policiamento Feminino:</b> tese <b>“Polícia Feminina” da Dra. Hilda Macedo</b> → <b>Decreto 24.548/55: Corpo de Policiamento Especial Feminino na Guarda Civil — primeiro das Américas</b>; <b>1970 integram o BPFem</b>; <b>2011 unificação dos quadros masculino/feminino</b> (ascensão igual).</div>
+<div class="topico"><b>Corregedoria; Congresso das PMs; hinos:</b> Canção 1831 (Tobias), <b>1950 Ten. Elêusis “Canção do Batalhão de Guardas”</b>; Corpo Musical desde 1857. Missões lembradas: <b>Campos das Palmas e Canudos (escolta/vanguarda)</b>.</div>`},
+{t:"Aula 15 e 16 — Regime Militar e redemocratização",d:"1964, unificação 1970, Joelma, 1988, GATE/COPOM e Covid.",h:`
+<div class="marco">⭐ <b>MARCO 18 — 1964:</b> Força Pública + Guarda Civil na revolução; <b>Constituição de 1967</b> reforça controle; <b>IGPM (Inspetoria Geral das PMs)</b>; <b>Decreto-Lei 667/69</b> reorganiza; <b>unificação em 1970: nasce a POLÍCIA MILITAR DO ESTADO DE SÃO PAULO</b> (com Bombeiros definidos em lei); criado o <b>CSP</b> e a 5ª Seção do EM.</div>
+<div class="topico"><b>Bombeiros heróis:</b> <b>incêndio do Joelma</b> e <b>escorregamentos da Serra do Mar</b>; TAM 1996/2007. <b>Colégio da PM</b>.</div>
+<div class="topico"><b>Constituição de 1988</b> (missão atual: polícia ostensiva e preservação da ordem). <b>GATE, COPOM, Resgate, investimento tecnológico</b>; <b>polícia comunitária (séc. XXI)</b>; <b>Copa 2014 e Olimpíada Rio 2016</b>.</div>
+<div class="marco">⭐ <b>MARCO 19 — 2020-2021: atuação na pandemia de COVID-19.</b> Lema da apostila: 19 estrelas = 19 marcos, da criação (1831) à Covid.</div>`}
+];
+const grade=document.getElementById('gradeAulas');
+AULAS.forEach((a,i)=>{
+  const d=document.createElement('div');d.className='aulaCard';
+  d.innerHTML=`<span class="badge">AULA ${i+1}</span><h3>${a.t}</h3><p>${a.d}</p><button class="btn btn-azul" onclick="abrirAula(${i})">Abrir aula</button> <button class="btn btn-cinza" onclick="abrirSim(${i+1})">Simulado</button>`;
+  grade.appendChild(d);
+});
+function abrirAula(i){
+  document.getElementById('conteudoAula').innerHTML=`<div class="card"><h2>${AULAS[i].t}</h2>${AULAS[i].h}<br><button class="btn btn-ouro" onclick="abrirSim(${i+1})">Fazer simulado desta aula →</button> <button class="btn btn-cinza" onclick="document.getElementById('conteudoAula').innerHTML=''">Fechar</button></div>`;
+  document.getElementById('conteudoAula').scrollIntoView({behavior:'smooth'});
+}
+
+/* ================= SIMULADOS =================
+   Q = enunciado | ALT = 5 alternativas | G = índice correta | F = fonte na apostila */
+const SIMS=[
+{id:1,nome:"Simuladão Geral — 20 questões (modelo da prova real)",tempo:"30 min",qs:[
+{q:"Qual foi o principal modelo inspirador para a criação dos corpos policiais modernos?",a:["A Polícia Metropolitana de Londres.","A Gendarmerie Francesa.","As Hermandades Espanholas.","A Guarda Pretoriana Romana.","A Intendência Geral de Polícia de Lisboa."],g:2,f:"Aula 1-2: Hermandades (Espanha)."},
+{q:"Qual a principal função das 'coortes de vigilância' instituídas em Roma?",a:["Supervisionar as leis e regras das cidades romanas.","Manter a segurança urbana nas regiões do Império Romano.","Defender o Império contra invasões externas.","Garantir a ordem religiosa.","Administrar os postos fixos."],g:1,f:"Aula 1-2: coortes de vigilância (Augusto)."},
+{q:"Quem foi responsável pela criação das instituições que deram origem às PMs provinciais?",a:["José da Costa Carvalho.","João Bráulio Muniz.","Francisco de Lima e Silva.","Padre Diogo Antônio Feijó.","Brigadeiro Rafael Tobias de Aguiar."],g:3,f:"Aula 3-4: Feijó, Ministro da Justiça 1831."},
+{q:"O que a Revolução Farroupilha (1835-1845) representou para a Guarda de SP?",a:["A Guarda foi criada para defender SP.","54 guardas enviados ao Sul, atuaram no combate.","A formação da primeira divisão da PMESP.","A extinção da Guarda pelo custo.","A Guarda atuou só na logística."],g:1,f:"Aula 3-4: Marco 2 — 54 guardas artilheiros."},
+{q:"Qual evento marcou o início do Segundo Reinado?",a:["Proclamação da República.","Lei do Ventre Livre.","Golpe da Maioridade.","Lei Áurea.","Abolição da escravatura."],g:2,f:"Aula 5-6: 23/07/1840."},
+{q:"Na Revolução Liberal de 1842, qual cidade paulista concentrou os revoltosos?",a:["Campinas.","São Paulo.","Sorocaba.","Santos.","Pirajuçara."],g:2,f:"Aula 5-6: Sorocaba, 17/05/1842."},
+{q:"O que foi a Revolta da Vacina e sua principal causa?",a:["Apoio à vacinação por surto de peste.","Protesto contra reformas urbanas e vacina obrigatória da varíola.","Movimento pelo fim da República.","Revolta de militares.","Conflito trabalhista da saúde."],g:1,f:"Aula 7-8: RJ 5/11/1904."},
+{q:"Qual foi a principal causa da Revolta da Chibata?",a:["Salários dos marinheiros.","Proibição do candomblé.","Disputa política.","Vacina obrigatória.","Castigos físicos aos marinheiros."],g:4,f:"Aula 9-10: João Cândido, 1910."},
+{q:"Ano de criação da Esquadrilha de Aviação da PMESP?",a:["1831.","1912.","1913.","1934.","1964."],g:2,f:"Aula 9-10: Escola de Aviação, 1913."},
+{q:"Que evento marcou o início da Era Vargas?",a:["Proclamação da República.","Revolução de 1930.","Segunda Guerra.","Abolição.","Guerra do Paraguai."],g:1,f:"Aula 11-12: queda de Washington Luís."},
+{q:"A Seção de Capturas tinha como maior expoente o 'Tenente Galinha'. Nome verdadeiro?",a:["Tenente João Antonio de Oliveira.","Tenente Augusto José de Mello.","Tenente Ernanido Amaral Peixoto.","Tenente Joaquim Antão Fernandes.","Tenente José Severino Dias."],g:0,f:"Aula 7-8: Seção de Capturas."},
+{q:"Conflito ocorrido durante o Primeiro Reinado?",a:["Revolta da Armada.","Revolta da Vacina.","Revolta da Chibata.","Revolta dos Mercenários.","Revolta dos Malês."],g:3,f:"Aula 1-2: Mercenários, 1828."},
+{q:"Em 1880, após o incêndio da Faculdade de Direito, quem foi contratado para criar o Corpo de Bombeiros?",a:["Rafael Tobias de Aguiar.","Tenente Manoel José Branco.","Tenente Alfredo José Martins.","Tenente José Severino Dias.","Tenente João Negrão."],g:3,f:"Aula 5-6: 10/03/1880."},
+{q:"Sobre a 1ª Missão Francesa (1906-1914), assinale a correta:",a:["Exigiu aumento de efetivo para a província.","Teve apoio do Exército e voltou após a WWI.","Foi interrompida pela queda do café.","Instruiu também mineiros e paranaenses.","Formada pelo Exército francês, instruiu a Força para defesa territorial."],g:4,f:"Aula 7-8: 21/03/1906."},
+{q:"Em 1829, a modernização da polícia de Londres foi promovida por:",a:["Sir Robert Peel.","Dom João IV.","Ten.-Cel. Raoul Negrel.","Ten.-Cel. Paoul Ballagny.","Dr. Oswaldo Cruz."],g:0,f:"Aula 1-2: Peel, out/1829."},
+{q:"O Brasão da PMESP tem bordadura vermelha com quantas estrelas (marcos)?",a:["21.","19.","17.","23.","18."],g:1,f:"Aula 3-4: 19 estrelas de 5 pontas."},
+{q:"Papel do Ten.-Cel. Amorim Bezerra nos levantes de 1842?",a:["Liderou a Coluna Libertadora.","Incorporou a cavalaria aos liberais.","Relatou vitória a Caxias em Sorocaba.","Liderou legalistas em Santa Luzia (MG).","Derrotou os revoltosos de Boaventura do Amaral em Venda Grande."],g:4,f:"Aula 5-6: 7/06/1842."},
+{q:"Sobre a sigla MMDC e 1932, é correto afirmar:",a:["MMDC = iniciais de 5 paulistas mortos em 23/05/1932, incluindo Alvarenga (morto 81 dias depois).","MMDC só fez ações militares, sem logística.","Dráusio, o mais jovem, tinha 14 anos e morreu na hora.","MMDC teve apoio só da elite.","IGHGS homenageou só os 4 originais."],g:0,f:"Aula 11-12: 23/05/1932."},
+{q:"Sobre o Corpo de Policiamento Feminino, assinale a correta:",a:["Criado em 1955 na Guarda Civil, sem cargo, só administrativo.","Dra. Hilda Macedo foi fundamental; primeira polícia feminina das Américas.","BPFem só cuidava da mulher, sem menores.","Mulheres em 1970 sem ostensivo.","Em 2011 unificaram-se os quadros masculino e feminino, com ascensão igual."],g:4,f:"Aula 13-14: Dec. 24.548/55; 2011."},
+{q:"A Revolução de 1924 iniciou-se em SP liderada por qual oficial da Força Pública?",a:["Major Nataniel Prado.","General Isidoro Dias Lopes.","Capitão Hermes da Fonseca.","Major Miguel Costa.","Tenente João Negrão."],g:3,f:"Aula 9-10: Marco 12."}
+]},
+{id:2,nome:"Aula 1 e 2 — Origens",tempo:"10 min",qs:[
+{q:"O termo 'polícia' deriva de:",a:["'Politia' romana diretamente.","'Politéia', de 'polis' (cidade-Estado grega).","'Política' de Maquiavel.","'Polis' romana.","'Politeuma' medieval."],g:1,f:"Aula 1-2: politéia/polis."},
+{q:"Em Atenas, o corpo de guardas urbanos tinha cerca de:",a:["100 escravos.","300 escravos.","600 soldados.","130 guardas.","3.940 homens."],g:1,f:"Aula 1-2: 300 escravos."},
+{q:"Os 'stationarii' em Roma eram:",a:["Patrulheiros das ruas.","Postos fixos.","Juízes.","Cavalarianos.","Músicos."],g:1,f:"Aula 1-2: vigiles x stationarii."},
+{q:"A Guarda Real de Polícia da Corte (cerne da PMERJ) foi regulamentada em:",a:["13/05/1809.","15/12/1831.","22/10/1831.","18/08/1831.","7/04/1857."],g:0,f:"Aula 1-2: decreto 1809."},
+{q:"A PM mais antiga do país é a de Minas Gerais, criada em:",a:["1809.","1818.","1825.","1775.","1831."],g:3,f:"Aula 1-2: MG 1775."}
+]},
+{id:3,nome:"Aula 3 e 4 — Regência e criação",tempo:"10 min",qs:[
+{q:"A Guarda Nacional foi criada em:",a:["22/10/1831.","15/12/1831.","18/08/1831.","6/07/1831.","17/07/1831."],g:2,f:"Aula 3-4: missão constitucional."},
+{q:"O efetivo inicial da Guarda de SP (1831) era:",a:["3.940 homens.","273 homens.","1.330 homens.","130 homens (100 inf + 30 cav).","79 guardas."],g:3,f:"Aula 3-4: Tobias de Aguiar."},
+{q:"A Guarda recém-criada ficou aquartelada (precariamente) no:",a:["Quartel da Luz.","Convento do Carmo.","Rua do Quartel.","Largo São Francisco.","Santos."],g:1,f:"Aula 3-4: falta de aquartelamento."},
+{q:"As estrelas do brasão representam:",a:["Batalhões atuais.","Marcos históricos da Corporação.","Cidades paulistas.","Governadores.","Comandantes."],g:1,f:"Aula 3-4: 19 marcos."},
+{q:"O lema no listel azul do brasão é:",a:["Ordem e Progresso.","Lealdade e Constância.","Honra e Glória.","Paz e Lei.","Fé e Coragem."],g:1,f:"Aula 3-4: brasão 1958."}
+]},
+{id:4,nome:"Aula 5 e 6 — 2º Império",tempo:"10 min",qs:[
+{q:"O 2º Reinado vai de:",a:["1822 a 1831.","1831 a 1840.","1840 (Maioridade) a 1889.","1889 a 1930.","1930 a 1945."],g:2,f:"Aula 5-6: 23/07/1840–15/11/1889."},
+{q:"O batismo de fogo da Cavalaria da Guarda foi em:",a:["Jaguaré.","Venda Grande (7/06/1842).","Santa Luzia.","Pirajuçara.","Sorocaba (20/06)."],g:1,f:"Aula 5-6: Amorim Bezerra."},
+{q:"O Corpo Musical foi criado em:",a:["13/05/1809.","15/12/1831.","7/04/1857 (Lei 24).","10/03/1880.","21/03/1906."],g:2,f:"Aula 5-6: 17 + sargento-mestre."},
+{q:"A Guerra do Paraguai ocorreu entre:",a:["1835 e 1845.","1842 e 1844.","1864 e 1870.","1893 e 1894.","1930 e 1932."],g:2,f:"Aula 5-6: Tríplice Aliança."},
+{q:"A Seção de Bombeiros de SP começou em:",a:["10/03/1880.","15/12/1831.","14/11/1891.","1913.","1955."],g:0,f:"Aula 5-6: Ten. Severino Dias."}
+]},
+{id:5,nome:"Aula 7 e 8 — 1ª República",tempo:"10 min",qs:[
+{q:"A Lei 17, de 14/11/1891:",a:["Criou a Guarda Nacional.","Criou a Força Policial (3.940 homens).","Criou a Aviação.","Criou a Guarda Civil.","Unificou a PM."],g:1,f:"Aula 7-8: 4 corpos + cavalaria + urbanos + bombeiros."},
+{q:"A Revolta da Armada/Federalista ocorreu em:",a:["1893-94.","1904.","1910.","1922.","1924."],g:0,f:"Aula 7-8: Marco 6."},
+{q:"Em Canudos, a unidade paulista 'Tobias de Aguiar' teve como missão inicial:",a:["Artilharia.","Escolta de comboios.","Aviação.","Policiamento urbano.","Radiopatrulha."],g:1,f:"Aula 7-8: Marco 8, vanguarda."},
+{q:"A 1ª Missão Francesa chegou em:",a:["1904.","1906 (21/03).","1913.","1919.","1930."],g:1,f:"Aula 7-8: até 1914."},
+{q:"A Polícia Civil de SP foi criada em:",a:["1831.","1841.","1891.","1906.","1970."],g:1,f:"Aula 7-8."}
+]},
+{id:6,nome:"Aula 9 e 10 — 1910 a 1928",tempo:"10 min",qs:[
+{q:"A Revolta da Chibata (1910) foi liderada pelo marinheiro:",a:["João Cândido.","Miguel Costa.","Caxias.","Tobias de Aguiar.","Feijó."],g:0,f:"Aula 9-10: contra castigos físicos."},
+{q:"A Greve Operária de 1917 reivindicava, entre outros:",a:["Fim da República.","Regulamentação do trabalho de mulheres e crianças.","Criação da PM.","Voto feminino.","Abolição."],g:1,f:"Aula 9-10: Marco 10."},
+{q:"Os '18 do Forte' ocorreram em:",a:["1917.","1922 (5/07).","1924.","1926.","1930."],g:1,f:"Aula 9-10: Marco 11."},
+{q:"A Revolução de 1924 em SP foi chefiada por:",a:["Isidoro Dias Lopes.","Miguel Costa.","Caxias.","Feijó.","Vargas."],g:1,f:"Aula 9-10: ~1.330 homens."},
+{q:"O Voo do Jahú e o Regulamento Policial de 28 pertencem ao contexto da aula:",a:["1 e 2.","3 e 4.","5 e 6.","9 e 10.","15 e 16."],g:3,f:"Aula 9-10: Marco 13."}
+]},
+{id:7,nome:"Aula 11 e 12 — Era Vargas",tempo:"10 min",qs:[
+{q:"A Revolução de 1930 depôs o presidente:",a:["Venceslau Brás.","Washington Luís.","Getúlio Vargas.","Júlio Prestes.","Bernardino de Campos."],g:1,f:"Aula 11-12: 24/10."},
+{q:"O MMDC homenageia mortos em:",a:["9/07/1932.","23/05/1932.","24/10/1930.","5/07/1922.","7/09/1822."],g:1,f:"Aula 11-12: 4 + Alvarenga."},
+{q:"Após 1930 a Instituição passa a se chamar:",a:["Guarda Municipal.","Corpo Policial.","Força Policial.","Guarda Civil.","Polícia Militar."],g:2,f:"Aula 11-12: apagar memória paulista."},
+{q:"Os movimentos extremistas combatidos foram em:",a:["1917 e 1922.","1924 e 1926.","1935 (comunistas) e 1938 (integralistas).","1946 e 1947.","1964 e 1970."],g:2,f:"Aula 11-12: Marco 16."},
+{q:"Na WWII, quantos guardas civis foram à Itália (FEB)?",a:["19.","54.","79.","130.","273."],g:2,f:"Aula 11-12: Marco 17."}
+]},
+{id:8,nome:"Aula 13 e 14 — Democracia",tempo:"10 min",qs:[
+{q:"Em 1947 a Instituição volta a se chamar:",a:["Guarda Civil.","Força Pública.","Força Policial.","Polícia Militar.","Brigada Policial."],g:1,f:"Aula 13-14: Const. Paulista."},
+{q:"O Corpo de Policiamento Feminino foi criado em:",a:["1949.","1950.","1955 (Dec. 24.548).","1970.","2011."],g:2,f:"Aula 13-14: Dra. Hilda Macedo."},
+{q:"O Presídio Militar Romão Gomes foi criado em:",a:["1948.","1949.","1950.","1952.","1955."],g:1,f:"Aula 13-14."},
+{q:"O Canil foi criado em 1950 com cães vindos:",a:["Da França.","Da Argentina.","Da Inglaterra.","Dos EUA.","De Portugal."],g:1,f:"Aula 13-14: precedente belga 1912."},
+{q:"A unificação dos quadros masculino/feminino ocorreu em:",a:["1955.","1970.","1988.","2011.","2020."],g:3,f:"Aula 13-14: ascensão igual."}
+]},
+{id:9,nome:"Aula 15 e 16 — 1964 aos dias atuais",tempo:"10 min",qs:[
+{q:"A unificação Força Pública + Guarda Civil (nasce a PMESP) foi em:",a:["1964.","1967.","1969.","1970.","1988."],g:3,f:"Aula 15-16: DL 667/69."},
+{q:"O órgão de controle das PMs criado no regime militar foi:",a:["COPOM.","GATE.","IGPM.","CSP.","CPChq."],g:2,f:"Aula 15-16: Inspetoria Geral."},
+{q:"A Constituição que fixa a missão atual (ostensiva/ordem pública) é a de:",a:["1934.","1937.","1946.","1967.","1988."],g:4,f:"Aula 15-16."},
+{q:"O Marco 19 (19ª estrela) refere-se a:",a:["1932.","1964.","2014/2016.","2020-2021 (Covid).","1880."],g:3,f:"Aula 15-16: pandemia."},
+{q:"São criações/modernizações recentes citadas:",a:["GATE, COPOM e Resgate.","Guarda Nacional.","Coortes.","Hermandades.","Vigiles."],g:0,f:"Aula 15-16."}
+]},
+{id:10,nome:"Simulado Geral 2 — 20 questões mistas (todas as aulas)",tempo:"30 min",qs:[
+{q:"Segundo Platão, os 'encarregados de guardar a cidade' eram:",a:["Os soldados.","Os magistrados.","Os escravos.","Os vigiles.","Os stationarii."],g:1,f:"Aula 1-2: conceito de polícia (politéia/polis)."},
+{q:"A Intendência Geral de Polícia da Corte e do Reino foi criada em Portugal em:",a:["1760.","1808.","1809.","1829.","1831."],g:0,f:"Aula 1-2: modelo francês, base da Intendência no Rio."},
+{q:"A Constituição do 1º Império, que instituiu o Poder Moderador exercido pelo Imperador, é de:",a:["7/09/1822.","25/03/1824.","17/02/1825.","11/06/1825.","7/04/1831."],g:1,f:"Aula 1-2: regime Monárquico Constitucional."},
+{q:"A Regência Trina Permanente foi eleita em:",a:["7/04/1831.","6/07/1831.","17/07/1831.","18/08/1831.","22/10/1831."],g:2,f:"Aula 3-4: após a abdicação de D. Pedro I."},
+{q:"Quantas das atuais Polícias Militares foram criadas no período Regencial (1831-1840)?",a:["5.","8.","10.","14.","19."],g:3,f:"Aula 3-4: mais da metade das províncias."},
+{q:"O efetivo da Guarda Nacional era recrutado entre cidadãos com renda de:",a:["100$000 nas cidades e 200$000 no campo.","200$000 nas cidades e 100$000 no campo.","50$000 em qualquer localidade.","500$000 nas cidades e 300$000 no campo.","Sem exigência de renda."],g:1,f:"Aula 3-4: cidadãos votantes, 21 a 60 anos."},
+{q:"O Segundo Reinado teve início com:",a:["A abdicação em 7/04/1831.","O Golpe da Maioridade em 23/07/1840.","A Lei do Ventre-Livre.","A Abolição em 13/05/1888.","A Proclamação da República."],g:1,f:"Aula 5-6: até 15/11/1889."},
+{q:"Na Revolução de 1842, a Coluna Libertadora (Major Galvão) seguiu para São Paulo estacionando em:",a:["Campinas.","Venda Grande.","Pirajuçara (Butantã).","Sorocaba.","Santa Luzia."],g:2,f:"Aula 5-6: segunda coluna revoltosa."},
+{q:"O Corpo Municipal Permanente partiu para a Guerra do Paraguai (10/04/1865) com efetivo de:",a:["130 homens.","54 guardas.","273 homens (com a banda).","1.330 homens.","3.940 homens."],g:2,f:"Aula 5-6: comando do Ten.-Cel. Gavião Peixoto."},
+{q:"A Lei nº 17, de 14/11/1891, fixou o efetivo da Força Policial em:",a:["130 homens.","273 homens.","1.330 homens.","3.141 guardas.","3.940 homens."],g:4,f:"Aula 7-8: 4 corpos + cavalaria + urbanos + bombeiros."},
+{q:"Na Revolta da Armada/Federalista, quem convocou a Força Pública e organizou os Batalhões Patrióticos?",a:["Bernardino de Campos, presidente de SP.","Custódio de Mello.","Gumercindo Saraiva.","Barão de Caxias.","General Ewerton."],g:0,f:"Aula 7-8: a partir de 15 de março."},
+{q:"A 1ª Missão Francesa (1906-1914) atuou na instrução da Força para atuação em:",a:["Policiamento urbano.","Defesa territorial.","Combate a incêndios.","Policiamento rodoviário.","Guarda de presídios."],g:1,f:"Aula 7-8: chegou em 21/03/1906."},
+{q:"A 2ª Missão Francesa iniciou-se em 1919 com o retorno ao Brasil do:",a:["General Ewerton.","General Antoine.","Sir Robert Peel.","Coronel Arbues.","Major Miguel Costa."],g:1,f:"Aula 9-10: continuidade da 1ª Missão."},
+{q:"O slogan adotado pela 2ª Missão Francesa foi:",a:["Ordem e Progresso.","Lealdade e Constância.","Do valor dos quadros depende o valor da tropa.","Tudo pela Pátria.","Servir e Proteger."],g:2,f:"Aula 9-10: foco na técnica profissional."},
+{q:"Na Revolução de 1930, apresentou-se como voluntário à Força Pública já aos 61 anos:",a:["Coronel Pedro Arbues.","Ten.-Cel. Edgard Armond.","Miguel Costa.","Coronel Marcondes Salgado.","Oswaldo Aranha."],g:0,f:"Aula 11-12: veterano da Federalista e de Canudos."},
+{q:"O serviço de radiopatrulha foi criado em São Paulo em:",a:["1930.","1932.","1934.","1935.","1937."],g:3,f:"Aula 11-12: com efetivos da Força e da Guarda Civil."},
+{q:"A Constituição Paulista que devolveu à Instituição o nome Força Pública é de:",a:["1934.","1937.","1946.","1947.","1967."],g:3,f:"Aula 13-14: pós–Estado Novo."},
+{q:"Antes da criação do Corpo de Polícia Rodoviária, o policiamento das rodovias era exercido pelos:",a:["Guardas Rodoviários do DER, que eram civis.","Batalhões de Infantaria.","Corpo de Bombeiros.","Batalhões Patrióticos.","Tropas de Linha."],g:0,f:"Aula 13-14: Cel. Pina de Figueiredo."},
+{q:"A IGPM (Inspetoria Geral das Polícias Militares) foi criada no contexto:",a:["Da 1ª República.","Da Era Vargas.","Do Regime Militar.","Da Redemocratização.","Do 2º Império."],g:2,f:"Aula 15-16: controle sobre as PMs."},
+{q:"A Constituição de 1967, em relação às Forças Públicas estaduais:",a:["Extinguiu-as.","Reforçou o controle sobre elas.","Unificou-as ao Exército.","Municipalizou-as.","Nada alterou."],g:1,f:"Aula 15-16: caminho ao DL 667/69."}
+]},
+{id:11,nome:"Simulado Geral 3 — 20 questões mistas (todas as aulas)",tempo:"30 min",qs:[
+{q:"Com a vinda da Família Real em 1808, o efetivo trazido para a segurança da Corte foi de cerca de:",a:["130 homens.","273 homens.","300 escravos.","600 homens.","3.940 homens."],g:3,f:"Aula 1-2: quartel-general no Rio."},
+{q:"As PMs da Bahia e de Pernambuco foram criadas em 1825, respectivamente em:",a:["17/02 e 11/06.","11/06 e 17/02.","13/05 e 7/09.","22/10 e 15/12.","19/04 e 7/09."],g:0,f:"Aula 1-2: ainda no 1º Império."},
+{q:"O Dia do Exército (19 de abril) remete à Batalha dos Guararapes, ocorrida em:",a:["1648.","1824.","1865.","1894.","1994."],g:0,f:"Aula 1-2: mito das 3 raças nas fileiras."},
+{q:"Na Guarda de 1831, o comando da tropa a cavalo (30 soldados) coube ao:",a:["Alferes José Gomes de Almeida.","Capitão Pedro Alves de Siqueira.","Tenente Gavião Peixoto.","Ten.-Cel. Amorim Bezerra.","Brigadeiro Tobias de Aguiar."],g:1,f:"Aula 3-4: veterano à época."},
+{q:"A recém-criada Guarda sofreu com a falta de aquartelamento adequado, ficando no:",a:["Quartel da Luz.","Convento do Carmo.","Largo São Francisco.","Rua do Quartel.","Santos."],g:1,f:"Aula 3-4: características iniciais."},
+{q:"A pacificação da Revolução Farroupilha, obtida por Caxias, foi assinada em:",a:["19/09/1835.","20/09/1835.","1º/03/1845.","17/05/1842.","9/09/1842."],g:2,f:"Aula 3-4: Marco 2."},
+{q:"A Retirada da Laguna, epopeia da Guerra do Paraguai, ocorreu entre:",a:["8/05 e 11/06/1867.","10/04 e 20/06/1865.","Dez/1864 e mar/1870.","28/05 e 20/06/1842.","5 e 16/10/1893."],g:0,f:"Aula 5-6: fome, sede e cólera-morbo."},
+{q:"Na época da criação dos Bombeiros, os avisos de incêndio eram transmitidos por:",a:["Telefone.","Rádio.","Repiques dos sinos das igrejas e avisos verbais.","Telégrafo.","Sirenes."],g:2,f:"Aula 5-6: Rua do Quartel (hoje 11 de Agosto)."},
+{q:"Após Sorocaba, Caxias seguiu para Minas Gerais e derrotou os liberais mineiros em:",a:["Venda Grande.","Jaguaré.","Santa Luzia.","Pirajuçara.","Campinas."],g:2,f:"Aula 5-6: Marco 4."},
+{q:"A Questão dos Protocolos envolveu a cobrança de:",a:["Verbas emprestadas ao Governo na Revolução Federalista, envolvendo italianos.","Impostos sobre a exportação do café.","Soldos atrasados da Força Pública.","Indenizações da 1ª Guerra.","Multas da Revolta da Vacina."],g:0,f:"Aula 7-8: Marco 7."},
+{q:"A 1ª Missão Francesa introduziu oficialmente no Brasil o:",a:["Judô e o caratê.","Boxe savate (francês) e a esgrima.","Tiro e a natação.","Hipismo e o polo.","Paraquedismo."],g:1,f:"Aula 7-8: modernização da tropa."},
+{q:"A Lei da Vacina obrigatória foi criada em:",a:["5/11/1904.","31/10/1904.","1910.","1917.","1906."],g:1,f:"Aula 7-8: Oswaldo Cruz; casas invadidas."},
+{q:"O emprego de cães no policiamento urbano teve início em:",a:["1906.","1912.","1913.","1919.","1924."],g:1,f:"Aula 9-10: também criado um pombal."},
+{q:"Após a Revolução de 1930, a Esquadrilha de Aviação foi:",a:["Ampliada.","Extinta, indo compor o Exército (o remanescente originou o Rádio-patrulhamento Aéreo em 1984).","Transferida à Marinha.","Vendida.","Municipalizada."],g:1,f:"Aula 9-10: atuara em 1924 e 1930."},
+{q:"Os últimos combates da Revolução Constitucionalista ocorreram em:",a:["Lapa e Itararé.","Porto Esperança e Itapeva.","Sorocaba e Campinas.","Santos e Lapa.","Santa Luzia e Venda Grande."],g:1,f:"Aula 11-12: rumo à Constituição de 1934."},
+{q:"Na Revolução de 1932, a Guarda Civil contava com:",a:["130 guardas.","273 homens.","1.330 homens.","3.141 guardas.","8.200 homens."],g:3,f:"Aula 11-12: mais voluntários (Cap. Kauffman)."},
+{q:"Quem apresentou o trabalho intitulado 'Polícia Feminina', fundamental para a criação do policiamento feminino?",a:["Dra. Hilda Macedo.","Dra. Nísia Floresta.","Ten. Severino Dias.","Cel. Pina de Figueiredo.","Dra. Carlota Joaquina."],g:0,f:"Aula 13-14: acolhido por unanimidade."},
+{q:"O Corpo de Policiamento Especial Feminino (Decreto 24.548/55) foi instituído junto à:",a:["Guarda Civil de São Paulo.","Força Pública.","Exército.","Guarda Nacional.","Polícia Civil."],g:0,f:"Aula 13-14: primeiro das Américas."},
+{q:"Ainda em 1970, além da unificação que criou a PMESP, foi criado o:",a:["GATE.","COPOM.","CSP.","IGPM.","CPChq."],g:2,f:"Aula 15-16: e a 5ª Seção do EM."},
+{q:"No século XXI, a atuação da PMESP em grandes eventos incluiu:",a:["Copa FIFA 2014 e Jogos Olímpicos Rio 2016.","Copa 1950 e Pan 1963.","Olimpíada 1988 e Copa 1994.","Expo 2000 e Pan 2007.","Copa 2010 e Olimpíada 2012."],g:0,f:"Aula 15-16: rumo à polícia comunitária."}
+]}
+];
+const gs=document.getElementById('gradeSim');
+SIMS.forEach(s=>{
+  const d=document.createElement('div');d.className='aulaCard';
+  d.innerHTML=`<span class="badge">${s.tempo}</span><h3>${s.nome}</h3><p>${s.qs.length} questões · correção com fonte na apostila</p><button class="btn btn-verde" onclick="abrirSim(${s.id})">Começar</button>`;
+  gs.appendChild(d);
+});
+let RESP=[];
+function abrirSim(id){
+  aba('simulados',document.querySelectorAll('nav button')[2]);
+  const s=SIMS.find(x=>x.id===id); RESP=new Array(s.qs.length).fill(null);
+  let h=`<div class="card"><h2>${s.nome}</h2><div id="timer" style="font-weight:700;color:#0b2a4a"></div>`;
+  s.qs.forEach((q,i)=>{
+    h+=`<div class="q"><p>${i+1}) ${q.q}</p>`;
+    q.a.forEach((alt,j)=>{
+      const L=String.fromCharCode(97+j);
+      h+=`<label id="s${id}q${i}l${j}"><input type="radio" name="s${id}q${i}" value="${j}" onchange="RESP[${i}]=${j}"> ${L}) ${alt}</label>`;
+    });
+    h+=`<div id="fb${i}" class="fonte"></div></div>`;
+  });
+  h+=`<button class="btn btn-verde" onclick="corrigir(${id})">Corrigir agora</button> <span class="fonte">Simulados por aula: 10 min · Geral: 30 min (cronômetro apenas orientativo).</span></div>`;
+  document.getElementById('areaQuiz').innerHTML=h;
+  document.getElementById('areaQuiz').scrollIntoView({behavior:'smooth'});
+  let t = id===1?1800:600;
+  const el=document.getElementById('timer');
+  window._iv&&clearInterval(window._iv);
+  window._iv=setInterval(()=>{t--;const m=Math.floor(t/60),ss=('0'+t%60).slice(-2);el.textContent=`⏱ Tempo restante: ${m}:${ss}`;if(t<=0)clearInterval(window._iv);},1000);
+}
+function corrigir(id){
+  const s=SIMS.find(x=>x.id===id); let ac=0;
+  s.qs.forEach((q,i)=>{
+    const ok=RESP[i]===q.g; if(ok)ac++;
+    q.a.forEach((_,j)=>{
+      const lb=document.getElementById(`s${id}q${i}l${j}`); if(!lb)return;
+      if(j===q.g)lb.classList.add('certa');
+      else if(RESP[i]===j)lb.classList.add('errada');
+    });
+    document.getElementById('fb'+i).innerHTML = (RESP[i]===null?'⚠️ Sem resposta. ':'')+`Gabarito: <b>${'abcde'[q.g].toUpperCase()}</b> · 📖 Fonte: ${q.f}`;
+  });
+  const nota=(ac/s.qs.length*10).toFixed(1);
+  const cls=ac/s.qs.length>=0.6?'ok':'fail';
+  document.getElementById('areaQuiz').insertAdjacentHTML('afterbegin',`<div class="card"><div class="resultado ${cls}">✅ Você acertou <b>${ac} de ${s.qs.length}</b> — nota ${nota}. ${ac/s.qs.length>=0.6?'Parabéns, padrão de aprovação! Continue revisando os erros.':'Foco na revisão: releia a aula e refaça o simulado.'}</div></div>`);
+  salvarProg(s.nome,ac,s.qs.length);
+  window.scrollTo(0,0);
+}
+function salvarProg(nome,ac,tot){
+  let p=JSON.parse(localStorage.getItem('pm_prog')||'[]');
+  p.push({nome,ac,tot,data:new Date().toLocaleString('pt-BR')});
+  localStorage.setItem('pm_prog',JSON.stringify(p)); mostrarProgresso();
+}
+function mostrarProgresso(){
+  let p=JSON.parse(localStorage.getItem('pm_prog')||'[]');
+  document.getElementById('progresso').innerHTML = p.length? p.slice(-6).reverse().map(x=>`• ${x.data} — ${x.nome}: <b>${x.ac}/${x.tot}</b>`).join('<br>') : 'Nenhum simulado feito ainda.';
+}
+function limparProg(){localStorage.removeItem('pm_prog');mostrarProgresso();}
+mostrarProgresso();
+
+/* ============ PESQUISA NA APOSTILA ÍNTEGRA ============ */
+function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
+function escRx(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function pesquisar(){
+  const box=document.getElementById('resBusca');
+  const termo=document.getElementById('campoBusca').value.trim();
+  if(termo.length<3){box.innerHTML='<div class="resBusca">Digite ao menos <b>3 letras</b> para pesquisar.</div>';return;}
+  if(typeof APOSTILA==='undefined'){box.innerHTML='<div class="resBusca">⚠️ Arquivo de busca (<b>apostila-busca.js</b>) não encontrado. Suba-o junto com o portal no GitHub/Vercel, na mesma pasta.</div>';return;}
+  // Busca por PALAVRAS: todas as palavras digitadas precisam aparecer na página,
+  // mesmo que separadas por quebra de linha ("Hilda \nMacedo"). Acentuação ignorada.
+  const nt=norm(termo);
+  const palavras=nt.split(/\s+/).filter(w=>w.length>=2);
+  if(!palavras.length){box.innerHTML='<div class="resBusca">Digite ao menos <b>3 letras</b> para pesquisar.</div>';return;}
+  const frase=palavras.join(' ');
+  // destaca no texto ORIGINAL (com acentos/maiúsculas), casando sem acento
+  const flex=w=>w.split('').map(ch=>{const m={a:'aàáâãä',e:'eèéêë',i:'iìíîï',o:'oòóôõö',u:'uùúûü',c:'cç',n:'nñ'}[ch];return m?'['+m+']':escRx(ch);}).join('');
+  let achados=[];
+  APOSTILA.forEach(p=>{
+    const txtD=(p.texto||'').replace(/\s+/g,' ').trim(); // original, quebras colapsadas: "Hilda Macedo" volta a ficar junto
+    const txtN=norm(txtD);
+    if(palavras.every(w=>txtN.indexOf(w)>=0)){
+      let centro=-1,exata=false,dispersas=false;
+      const idxF=txtN.indexOf(frase);
+      if(idxF>=0){centro=idxF;exata=true;}
+      else{
+        // palavras existem mas separadas: centra na maior concentração e avisa
+        const occ=[];
+        palavras.forEach(w=>{let s=0,k=-1;while((k=txtN.indexOf(w,s))>=0){occ.push({pos:k,w});s=k+1;if(occ.length>200)break;}});
+        occ.sort((a,b)=>a.pos-b.pos);
+        let best={n:0,pos:occ.length?occ[0].pos:0};
+        for(let i=0;i<occ.length;i++){const s2=new Set();for(let j=0;j<occ.length;j++){if(Math.abs(occ[j].pos-occ[i].pos)<=150)s2.add(occ[j].w);}if(s2.size>best.n)best={n:s2.size,pos:occ[i].pos};}
+        centro=best.pos;dispersas=best.n<palavras.length;
+      }
+      // Recorte por FRASE: volta até o ponto final anterior e avança até o
+      // próximo, para mostrar a frase inteira sem vazar para o tópico seguinte.
+      let ini=Math.max(0,centro-120), fim=Math.min(txtD.length,centro+220);
+      const antes=txtD.slice(Math.max(0,centro-450),centro);
+      const mAnt=[...antes.matchAll(/[.!?…:]\s+/g)];
+      if(mAnt.length) ini=Math.max(0,centro-450)+mAnt[mAnt.length-1].index+mAnt[mAnt.length-1][0].length;
+      const depois=txtD.slice(centro,centro+500);
+      const mDep=depois.search(/[.!?…](\s|$)/);
+      if(mDep>=0) fim=centro+mDep+1;
+      if(fim-ini>600){ini=Math.max(0,centro-120);fim=Math.min(txtD.length,ini+340);}
+      let trecho=txtD.slice(ini,fim).trim();
+      try{
+        if(exata){const pat=palavras.map(flex).join('\\s+');trecho=trecho.replace(new RegExp('('+pat+')','gi'),'<mark>$1</mark>');}
+        else palavras.forEach(w=>{trecho=trecho.replace(new RegExp('('+flex(w)+')','gi'),'<mark>$1</mark>');});
+      }catch(e){}
+      achados.push({pag:p.pag,trecho,alerta:dispersas});
+    }
+  });
+  if(!achados.length){box.innerHTML=`<div class="resBusca">Nenhum trecho encontrado para <b>"${termo}"</b>. Tente outra grafia (ex: sem acento, parte do nome).</div>`;return;}
+  box.innerHTML=`<p><b>${achados.length}</b> trecho(s) em <b>${new Set(achados.map(a=>a.pag)).size}</b> página(s) para <b>"${termo}"</b>:</p>`+
+    achados.slice(0,30).map(a=>`<div class="resBusca"><span class="pg">📄 Página ${a.pag}</span><br>...${a.trecho}...${a.alerta?'<br><span class="fonte">⚠️ As palavras estão em pontos diferentes desta página — trecho mostra a maior concentração delas.</span>':''}</div>`).join('')+
+    (achados.length>30?`<p class="fonte">Mostrando 30 de ${achados.length} — refine a busca.</p>`:'');
+}
+</script>
+</body>
+</html>
